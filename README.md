@@ -1,64 +1,49 @@
-# Assignment
+# Solution to Home Assessment
 
-Given the tags and sentences provided, write the code to tag the sentences with the appropriate tags.
+This solution implements both tasks as requested in the assignment:
 
-To complete the task, copy  the repository code and implement the solution in your own repository.  The code should
-be written in python. Any python libraries can be used but if non-standard libraries are used please also
-create a *requirements.txt* file with the library name and version and include it with your submission.  
+## Implementation Details
 
-Please include all the code used and provide comments or README as appropriate.
+### Task 1: Exact Keyword Matching
+The implementation in `task1.py` performs the following steps:
+1. Loads the tags and their keywords from `data/tags.csv`
+2. Processes each sentence from `data/sentences.txt`
+3. For each sentence, finds all matching tags based on exact keyword matching (ignoring case)
+4. Outputs the results to `task_1_output.tsv` in the required format
 
+### Task 2: Machine Learning Approach
+The implementation in `task2.py` uses a machine learning approach:
+1. Uses TF-IDF vectorization to convert sentences into feature vectors
+2. Implements a multi-label classification approach using LinearSVC
+3. Trains the model using the keyword matches as initial labels
+4. Augments the training data with the keywords themselves as examples
+5. Outputs the results to `task_2_output.tsv` in the required format
 
-# Data
+## How to Run
 
-[tags](data/tags.csv) contains the list of ids, tag names and keywords in csv format. Keywords are array of strings
-encoded as a string. For example,
-
-```aiignore
-44,Death of a Relative,"['died', 'death', 'funeral', 'payable on death', 'death certificate', 'passed away', 'passed on', 'estate', 'beneficiary', 'probate']"
+### Prerequisites
+Make sure you have the required dependencies installed:
+```
+pip install -r requirements.txt
 ```
 
-[sentences](data/sentences.csv) contains the list of sentences, one per line.
-```aiignore
-Loan payoff
-how do i dispute a charge?
-Is the system down now?
+### Running Task 1
 ```
-
-# Task 1
-
-Given the data above tag each sentence with all the tags based on exactly matching keywords ignoring the lower/upper case differences.  The output should
-be
-```aiignore
-sentence\ttag1, tag2, tag3
+python task1.py
 ```
-i. each sentence followed by a TAB and then comma-delimited list of tags that match.  If no tags apply, the output line
-should be just the sentence.
+This will generate the `task_1_output.tsv` file with the tagged sentences.
 
-Here is example of the output using couple sentences from [sentences](data/sentences.txt) with comments above each sentence
-```aiignore
-...
-# due to match of 'car loan' in the keywords for  "Vehicle Loan" tag and 'interest rate' in the keywords for "Credit Card"
-I need to know my interest rate on my car loan\tVehicle Loan, Credit Card
-# no tag assigned since no matches were found for any keywords in tags.csv
-Change of address\t
-#  due to match of 'CD' in the keywords for "Investing"
-CD rates\tInvesting
-...
+### Running Task 2
 ```
-
-The output file should be named: *task_1_output.tsv* 
-
-# Task 2
-
-Use any machine learning based method to tag each sentence with the tags based on that method you chose and output in 
-the same format as above:
-```aiignore
-sentence\ttag1, tag2, tag3
+python task2.py
 ```
-ie each sentence followed by a TAB and then comma-delimited list of tags that match.  If no tags apply, the output line
-should be just the sentence.
+This will:
+1. Train a machine learning model
+2. Save the model components in the `models` directory
+3. Generate the `task_2_output.tsv` file with the tagged sentences
 
-The output file should be named: *task_2_output.tsv* 
-
-If the method requires training, please include both the training and tagging code in your submission. 
+## Notes
+- The machine learning approach in Task 2 uses the keyword matches from Task 1 as initial training data
+- It further augments the training data with multi-word keywords to improve classification
+- The model uses TF-IDF features with unigrams and bigrams to capture phrase patterns
+- A multi-label classifier is used since sentences can have multiple tags
